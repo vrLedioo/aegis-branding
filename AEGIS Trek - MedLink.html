@@ -18,34 +18,28 @@
 <body>
 <div id="root"></div>
 <script type="text/babel" src="browser-window.jsx"></script>
-<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="showcase-carousel.jsx"></script>
 <script type="text/babel" src="medlink-screens.jsx"></script>
 <script type="text/babel" data-presets="react">
 function Win({ url, children }) {
   return <ChromeWindow url={url} tabs={[{title:'MedLink — AEGIS Trek'}]} width={1440} height={900}>{children}</ChromeWindow>;
 }
 function App() {
+  const screens = [
+    { label: "01 · Overview", component: <Win url="medlink.aegistrek.com/overview"><MLScreen1Overview/></Win> },
+    { label: "02 · Patient Roster", component: <Win url="medlink.aegistrek.com/patients"><MLScreen2Patients/></Win> },
+    { label: "03 · Patient Detail · Critical", component: <Win url="medlink.aegistrek.com/patients/AGX-J-0412"><MLScreen3Detail/></Win> },
+    { label: "04 · Drone Fleet", component: <Win url="medlink.aegistrek.com/drones"><MLScreen4Fleet/></Win> },
+    { label: "05 · Incident Report", component: <Win url="medlink.aegistrek.com/incidents/2026-0918-0412"><MLScreen5Report/></Win> }
+  ];
+
   return (
-    <DesignCanvas title="MedLink — Web Dashboard"
-      subtitle="AEGIS Trek · Deliverable 05 · 1440 × 900">
-      <DCSection id="medlink" title="MedLink — 5 Key Screens">
-        <DCArtboard id="overview" label="01 · Overview" width={1440} height={900}>
-          <Win url="medlink.aegistrek.com/overview"><MLScreen1Overview/></Win>
-        </DCArtboard>
-        <DCArtboard id="patients" label="02 · Patient Roster" width={1440} height={900}>
-          <Win url="medlink.aegistrek.com/patients"><MLScreen2Patients/></Win>
-        </DCArtboard>
-        <DCArtboard id="detail" label="03 · Patient Detail · Critical" width={1440} height={900}>
-          <Win url="medlink.aegistrek.com/patients/AGX-J-0412"><MLScreen3Detail/></Win>
-        </DCArtboard>
-        <DCArtboard id="fleet" label="04 · Drone Fleet" width={1440} height={900}>
-          <Win url="medlink.aegistrek.com/drones"><MLScreen4Fleet/></Win>
-        </DCArtboard>
-        <DCArtboard id="report" label="05 · Incident Report" width={1440} height={900}>
-          <Win url="medlink.aegistrek.com/incidents/2026-0918-0412"><MLScreen5Report/></Win>
-        </DCArtboard>
-      </DCSection>
-    </DesignCanvas>
+    <ShowcaseCarousel 
+      title="MedLink — Web Dashboard"
+      subtitle="AEGIS Trek · Deliverable 05 · 1440 × 900"
+      screens={screens}
+      isMobile={false}
+    />
   );
 }
 ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
