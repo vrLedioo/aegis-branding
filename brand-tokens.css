@@ -1,0 +1,29 @@
+/* AEGIS — unified brand tokens (v2, May 2026) */
+:root {
+  --aegis-orange: #FF5E1A;
+  --aegis-orange-soft: rgba(255, 94, 26, 0.12);
+  --shield-obsidian: #12151B;
+  --shield-deep: #0A0C10;
+  --signal-volt: #C8FF00;
+  --signal-volt-soft: rgba(200, 255, 0, 0.14);
+  --terrain-graphite: #2D333B;
+  --summit-frost: #E8ECF0;
+  --storm-slate: #6B7685;
+
+  --bg-primary: #0A0C10;
+  --bg-secondary: #12151B;
+  --bg-tertiary: #181B22;
+  --border-tertiary: rgba(255,255,255,0.10);
+  --border-strong: rgba(255,255,255,0.18);
+  --text-primary: #FFFFFF;
+  --text-secondary: #8B949E;
+  --text-tertiary: #6B7685;
+
+  --font-display: 'Rajdhani', system-ui, sans-serif;
+  --font-text: 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+}

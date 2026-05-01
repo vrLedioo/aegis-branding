@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 110" width="400" height="110">
+  <title>AEGIS — The Smartest Shield in the Wild (dark mode)</title>
+  <rect width="400" height="110" fill="#0A0C10"></rect>
+  <g id="mark" transform="translate(50, 55)">
+    <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#FF5E1A"></polygon>
+    <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#12151B"></polygon>
+    <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#FF5E1A"></polygon>
+    <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"></polygon>
+  </g>
+  <text x="110" y="62" fill="#FFFFFF" font-family="&#39;Rajdhani&#39;, &#39;Helvetica Neue&#39;, Arial, sans-serif" font-weight="700" font-size="44" letter-spacing="4">AEGIS</text>
+  <text x="111" y="86" fill="#8B949E" font-family="&#39;Inter&#39;, &#39;Helvetica Neue&#39;, Arial, sans-serif" font-size="12" letter-spacing="0.5">The Smartest Shield in the Wild.</text>
+</svg>

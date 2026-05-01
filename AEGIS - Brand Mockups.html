@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS — Brand in the Wild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="brand-tokens.css">
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* page header */
+  .page-head {
+    padding: 80px 48px 48px; max-width: 1480px; margin: 0 auto;
+    border-bottom: 1px solid var(--border-tertiary);
+  }
+  .page-head .eyebrow {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.3em;
+    color: var(--aegis-orange); text-transform: uppercase;
+    display:flex; align-items:center; gap: 12px; margin-bottom: 24px;
+  }
+  .page-head .eyebrow::before {
+    content:''; width:8px; height:8px; border-radius:50%; background: var(--aegis-orange);
+  }
+  .page-head h1 {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(48px, 7vw, 96px); line-height: 0.95; margin: 0;
+    letter-spacing: -0.01em; max-width: 1100px;
+  }
+  .page-head h1 em {
+    font-style: normal; font-weight: 500;
+    background: linear-gradient(90deg, var(--aegis-orange), #FF8C5A);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .page-head .meta {
+    display: flex; gap: 48px; flex-wrap: wrap; margin-top: 40px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em;
+    color: var(--text-tertiary); text-transform: uppercase;
+  }
+  .page-head .meta span b { display: block; color: var(--text-primary); margin-top: 4px; font-weight: 500; }
+
+  .back-link {
+    position: fixed; top: 24px; left: 24px; z-index: 10;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 16px; background: rgba(10,12,16,0.7); backdrop-filter: blur(10px);
+    border: 1px solid var(--border-tertiary); border-radius: 100px;
+    color: var(--text-secondary); text-decoration: none;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em;
+    text-transform: uppercase; transition: all 0.2s;
+  }
+  .back-link:hover { color: var(--signal-volt); border-color: var(--signal-volt); }
+
+  /* board layout */
+  .boards { padding: 48px; max-width: 1480px; margin: 0 auto; }
+  .board {
+    margin-bottom: 32px; border: 1px solid var(--border-tertiary);
+    border-radius: var(--radius-lg); overflow: hidden;
+    background: var(--bg-secondary);
+  }
+  .board-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 24px 32px; border-bottom: 1px solid var(--border-tertiary);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .board-head .num {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em;
+    color: var(--aegis-orange); text-transform: uppercase;
+  }
+  .board-head h2 {
+    font-family: var(--font-display); font-weight: 600; font-size: 28px;
+    margin: 4px 0 0; line-height: 1;
+  }
+  .board-head .desc {
+    color: var(--text-secondary); font-size: 13px; max-width: 480px; margin-top: 4px;
+  }
+  .board-body {
+    display: grid; gap: 1px; background: var(--border-tertiary);
+  }
+
+  /* common scene styles */
+  .scene {
+    background: var(--bg-primary); padding: 48px;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 360px; position: relative; overflow: hidden;
+  }
+  .scene-label {
+    position: absolute; top: 16px; left: 20px;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em;
+    color: var(--text-tertiary); text-transform: uppercase;
+  }
+
+  /* row variants */
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  @media (max-width: 980px) { .row-2,.row-3,.row-4 { grid-template-columns: 1fr; } }
+
+  /* APP ICON */
+  .app-icon-frame {
+    background: linear-gradient(160deg, #2D333B 0%, #181B22 100%);
+    padding: 80px 60px; border-radius: var(--radius-lg);
+    display: flex; flex-direction: column; align-items: center; gap: 32px;
+  }
+  .app-icon {
+    width: 180px; height: 180px;
+    background: linear-gradient(160deg, #FF5E1A 0%, #E04A12 100%);
+    border-radius: 40px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+  .app-icon-grid { display: grid; grid-template-columns: repeat(3, 80px); gap: 24px; }
+  .app-icon-grid .app-icon { width: 80px; height: 80px; border-radius: 18px; }
+  .app-icon-grid .app-icon svg { width: 50px; height: 50px; }
+  .app-icon-name {
+    font-family: var(--font-display); font-weight: 600; font-size: 18px;
+    letter-spacing: 0.05em; text-align: center;
+  }
+  .app-icon-name small { display: block; font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.2em; margin-top: 6px; }
+
+  /* JACKET PATCH */
+  .patch-scene { background: linear-gradient(160deg, #1a1d24, #12151B); }
+  .jacket-fabric {
+    width: 100%; max-width: 480px; aspect-ratio: 4/3;
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 6px),
+      linear-gradient(135deg, #2D333B 0%, #1a1d24 100%);
+    border-radius: 12px; position: relative;
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.5);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .jacket-zipper {
+    position: absolute; left: 50%; top: 0; bottom: 0; width: 6px;
+    transform: translateX(-50%);
+    background: repeating-linear-gradient(0deg, #6B7685 0 4px, #2D333B 4px 6px);
+  }
+  .patch {
+    background: var(--shield-obsidian);
+    border: 2px solid var(--aegis-orange); border-radius: 8px;
+    padding: 14px 20px; position: relative; z-index: 1;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .patch-text {
+    font-family: var(--font-display); font-weight: 700; font-size: 18px;
+    letter-spacing: 3px;
+  }
+
+  /* PACKAGING BOX */
+  .pkg-box {
+    width: 320px; aspect-ratio: 1/1.3; position: relative;
+    background: var(--shield-obsidian);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 4px;
+    padding: 28px 24px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.6);
+    overflow: hidden;
+  }
+  .pkg-box::after {
+    content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 6px;
+    background: var(--aegis-orange);
+  }
+  .pkg-top { display: flex; align-items: center; gap: 10px; }
+  .pkg-top-name { font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: 3px; }
+  .pkg-product {
+    font-family: var(--font-display); font-weight: 600; font-size: 36px;
+    line-height: 1; margin: auto 0;
+  }
+  .pkg-product small { display: block; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.25em; color: var(--signal-volt); margin-bottom: 8px; font-weight: 500; }
+  .pkg-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1); padding-top: 12px;
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em;
+    color: var(--text-tertiary); text-transform: uppercase;
+    display: flex; justify-content: space-between;
+  }
+
+  /* HANG TAG */
+  .hangtag {
+    width: 220px; aspect-ratio: 1/1.6; position: relative;
+    background: #E8ECF0; color: #12151B;
+    padding: 24px 20px; border-radius: 4px;
+    display: flex; flex-direction: column;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    transform: rotate(-4deg);
+  }
+  .hangtag::before {
+    content: ''; position: absolute; top: 14px; left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px; border-radius: 50%;
+    background: #12151B; box-shadow: inset 0 0 0 4px #E8ECF0;
+  }
+  .hangtag-mark { display: flex; justify-content: center; margin: 32px 0 24px; }
+  .hangtag-text { font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: 3px; text-align: center; color: #12151B; }
+  .hangtag-tag { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; color: #6B7685; text-align: center; margin-top: 4px; text-transform: uppercase; }
+  .hangtag-spec {
+    margin-top: auto; font-family: var(--font-mono); font-size: 9px;
+    line-height: 1.6; color: #6B7685; letter-spacing: 0.05em;
+    border-top: 1px solid #c8d0d9; padding-top: 12px;
+  }
+  .hangtag-spec b { color: #12151B; font-weight: 600; }
+
+  /* BUSINESS CARD */
+  .biz-card-stack {
+    position: relative; width: 320px; height: 200px;
+  }
+  .biz-card {
+    width: 320px; height: 200px; border-radius: 6px;
+    padding: 24px; position: absolute; top: 0; left: 0;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .biz-card.front {
+    background: var(--shield-obsidian);
+    border: 1px solid rgba(255,255,255,0.06);
+    transform: rotate(-3deg);
+  }
+  .biz-card.back {
+    background: var(--aegis-orange);
+    transform: rotate(4deg) translateX(40px) translateY(20px);
+    color: #12151B;
+  }
+  .biz-name { font-family: var(--font-display); font-weight: 600; font-size: 20px; line-height: 1.1; }
+  .biz-role { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em; color: var(--signal-volt); text-transform: uppercase; margin-top: 4px; }
+  .biz-contact { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.05em; color: var(--text-secondary); line-height: 1.7; }
+  .biz-back-mark { display: flex; align-items: center; justify-content: center; height: 100%; }
+
+  /* SIGNAGE */
+  .signage-scene {
+    background:
+      linear-gradient(180deg, rgba(10,12,16,0) 0%, rgba(10,12,16,0.5) 60%, rgba(10,12,16,0.85) 100%),
+      linear-gradient(180deg, #2a2e36 0%, #181b22 100%);
+  }
+  .signage-board {
+    width: 100%; max-width: 540px; aspect-ratio: 16/9;
+    background: var(--shield-obsidian);
+    border: 1px solid var(--aegis-orange);
+    border-radius: 8px; padding: 32px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    position: relative; box-shadow: 0 0 60px rgba(255, 94, 26, 0.18);
+  }
+  .signage-board::before {
+    content: ''; position: absolute; top: -3px; left: -3px; right: -3px; bottom: -3px;
+    border: 1px solid rgba(255, 94, 26, 0.2); border-radius: 10px; pointer-events: none;
+  }
+  .signage-top { display: flex; align-items: center; justify-content: space-between; }
+  .signage-emergency {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.3em;
+    color: var(--signal-volt); text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .signage-emergency::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--signal-volt);
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+  .signage-headline {
+    font-family: var(--font-display); font-weight: 700; font-size: 44px;
+    line-height: 0.95; letter-spacing: -0.01em;
+  }
+  .signage-headline em { color: var(--aegis-orange); font-style: normal; }
+  .signage-meta {
+    display: flex; justify-content: space-between;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em;
+    color: var(--text-tertiary); text-transform: uppercase;
+  }
+
+  /* T-SHIRT / APPAREL */
+  .tee-scene { background: #1a1d24; }
+  .tee {
+    width: 320px; aspect-ratio: 1/1.15; position: relative;
+    background:
+      radial-gradient(ellipse at 50% 30%, #1a1d24, #0e1015 80%);
+  }
+  .tee-svg { width: 100%; height: 100%; }
+  .tee-print {
+    position: absolute; top: 35%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  .tee-print-text {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 28px; letter-spacing: 4px; margin-top: 12px;
+  }
+  .tee-print-tag {
+    font-family: var(--font-mono); font-size: 9px;
+    letter-spacing: 0.25em; color: var(--text-tertiary); text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* DRONE LIVERY */
+  .drone-scene {
+    background:
+      radial-gradient(circle at 50% 60%, rgba(255,94,26,0.06), transparent 60%),
+      linear-gradient(180deg, #181b22 0%, #0e1015 100%);
+  }
+  .drone-body {
+    width: 360px; aspect-ratio: 1.2/1; position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* SOCIAL POST / OOH */
+  .social-post {
+    width: 360px; aspect-ratio: 1/1; padding: 32px;
+    background: var(--shield-obsidian);
+    border-radius: 8px; position: relative; overflow: hidden;
+    display: flex; flex-direction: column; justify-content: space-between;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+  }
+  .social-post::before {
+    content: ''; position: absolute; right: -120px; bottom: -120px;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(255,94,26,0.25), transparent 60%);
+    pointer-events: none;
+  }
+  .social-post-eyebrow {
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.3em;
+    color: var(--aegis-orange); text-transform: uppercase;
+  }
+  .social-post-headline {
+    font-family: var(--font-display); font-weight: 700; font-size: 38px;
+    line-height: 0.95; letter-spacing: -0.01em;
+    z-index: 1; position: relative;
+  }
+  .social-post-headline em { color: var(--signal-volt); font-style: normal; }
+  .social-post-foot {
+    display: flex; justify-content: space-between; align-items: end;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.22em;
+    color: var(--text-secondary); text-transform: uppercase;
+    position: relative; z-index: 1;
+  }
+
+  /* WEB FAVICON / BROWSER */
+  .browser-window {
+    width: 100%; max-width: 520px; aspect-ratio: 16/10;
+    background: var(--bg-secondary); border-radius: 10px;
+    border: 1px solid var(--border-tertiary); overflow: hidden;
+    box-shadow: 0 24px 48px rgba(0,0,0,0.5);
+  }
+  .browser-bar {
+    height: 36px; background: #0E1015; border-bottom: 1px solid var(--border-tertiary);
+    display: flex; align-items: center; padding: 0 12px; gap: 8px;
+  }
+  .browser-dots { display: flex; gap: 6px; }
+  .browser-dots span { width: 10px; height: 10px; border-radius: 50%; background: #2D333B; }
+  .browser-tab {
+    margin-left: 20px; padding: 6px 14px; border-radius: 6px 6px 0 0;
+    background: var(--bg-secondary);
+    display: flex; align-items: center; gap: 8px;
+    font-family: var(--font-text); font-size: 12px; color: var(--text-secondary);
+  }
+  .browser-tab svg { width: 14px; height: 14px; }
+  .browser-content {
+    padding: 24px; display: flex; flex-direction: column; justify-content: center; align-items: center;
+    height: calc(100% - 36px); background: linear-gradient(160deg, #14171f 0%, #0E1015 100%);
+  }
+  .browser-content .url {
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);
+    margin-bottom: 16px; letter-spacing: 0.05em;
+  }
+  .browser-content h3 {
+    font-family: var(--font-display); font-weight: 700; font-size: 32px;
+    margin: 0; text-align: center;
+  }
+
+  /* STICKER PACK */
+  .stickers {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    width: 100%; max-width: 540px;
+  }
+  .sticker {
+    aspect-ratio: 1/1; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    position: relative;
+  }
+  .sticker-1 { background: var(--aegis-orange); }
+  .sticker-2 { background: var(--shield-obsidian); border: 2px solid var(--signal-volt); }
+  .sticker-3 { background: var(--summit-frost); }
+  .sticker-text {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 14px; letter-spacing: 2px;
+    text-align: center; padding: 0 12px;
+  }
+  .sticker-1 .sticker-text { color: #12151B; }
+  .sticker-2 .sticker-text { color: var(--signal-volt); }
+  .sticker-3 .sticker-text { color: #12151B; }
+
+  /* CTA */
+  .download-cta {
+    margin: 64px 48px; max-width: 1480px;
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, #1A1E26 100%);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-tertiary);
+    padding: 56px 48px; position: relative; overflow: hidden;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+  }
+  .download-cta::before {
+    content:''; position: absolute; top:0; left:0; right:0; height: 4px;
+    background: linear-gradient(90deg, var(--aegis-orange), var(--signal-volt));
+  }
+  .download-cta h2 {
+    font-family: var(--font-display); font-weight: 700; font-size: 48px;
+    line-height: 1; margin: 0 0 16px;
+  }
+  .download-cta p { color: var(--text-secondary); font-size: 16px; line-height: 1.6; margin: 0 0 32px; max-width: 460px; }
+  .dl-list { display: flex; flex-direction: column; gap: 12px; }
+  .dl-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 24px; background: var(--bg-primary);
+    border: 1px solid var(--border-tertiary); border-radius: 12px;
+    text-decoration: none; color: inherit; transition: all 0.2s;
+  }
+  .dl-row:hover { border-color: var(--aegis-orange); transform: translateX(4px); }
+  .dl-info .name { font-family: var(--font-display); font-weight: 600; font-size: 16px; }
+  .dl-info .meta { font-family: var(--font-mono); font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 4px; }
+  .dl-arrow {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em;
+    color: var(--signal-volt); text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  @media (max-width: 980px) { .download-cta { grid-template-columns: 1fr; } }
+
+  /* footer */
+  .footer {
+    border-top: 1px solid var(--border-tertiary); padding: 48px;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em;
+    color: var(--text-tertiary); text-transform: uppercase;
+    max-width: 1480px; margin: 0 auto;
+  }
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back-link">← Brand Home</a>
+
+<header class="page-head">
+  <div class="eyebrow">Brand In The Wild · Application Boards</div>
+  <h1>Identity, <em>applied</em>.</h1>
+  <div class="meta">
+    <span>SECTIONS<b>9 boards</b></span>
+    <span>SURFACES<b>Apparel · Print · Digital · Hardware</b></span>
+    <span>STATUS<b style="color: var(--signal-volt);">◆ ACTIVE</b></span>
+  </div>
+</header>
+
+<main class="boards">
+
+  <!-- 01 LOGO MARKS -->
+  <section class="board">
+    <div class="board-head">
+      <div>
+        <div class="num">01 · MARKS</div>
+        <h2>The mark, three ways.</h2>
+      </div>
+      <p class="desc">Hex-only for tight spaces, primary lockup for headers, white reverse for dark surfaces.</p>
+    </div>
+    <div class="board-body row-3">
+      <div class="scene" style="background: #FFFFFF;">
+        <div class="scene-label" style="color: #6B7685;">HEX MARK · LIGHT</div>
+        <svg viewBox="-50 -50 100 100" width="160" height="160">
+          <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#FF5E1A"/>
+          <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#12151B"/>
+          <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#FF5E1A"/>
+          <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+        </svg>
+      </div>
+      <div class="scene" style="background: #12151B;">
+        <div class="scene-label">PRIMARY LOCKUP · DARK</div>
+        <svg viewBox="0 0 360 100" width="280">
+          <g transform="translate(45,50)">
+            <polygon points="0,-38 33,-19 33,19 0,38 -33,19 -33,-19" fill="#FF5E1A"/>
+            <polygon points="0,-27.5 23.8,-13.7 23.8,13.7 0,27.5 -23.8,13.7 -23.8,-13.7" fill="#12151B"/>
+            <polygon points="0,14.4 -12.1,1.7 -7.3,-2.4 0,5.6 7.3,-2.4 12.1,1.7" fill="#FF5E1A"/>
+            <polygon points="0,-11.2 -2.9,-4.1 2.9,-4.1" fill="#C8FF00"/>
+          </g>
+          <text x="100" y="56" fill="#FFFFFF" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="40" letter-spacing="4">AEGIS</text>
+          <text x="101" y="78" fill="#888" font-family="'Inter', sans-serif" font-size="12" letter-spacing="0.5">The Smartest Shield in the Wild.</text>
+        </svg>
+      </div>
+      <div class="scene" style="background: #FF5E1A;">
+        <div class="scene-label" style="color: rgba(0,0,0,0.5);">REVERSED · ON BRAND</div>
+        <svg viewBox="0 0 360 100" width="280">
+          <g transform="translate(45,50)">
+            <polygon points="0,-38 33,-19 33,19 0,38 -33,19 -33,-19" fill="#12151B"/>
+            <polygon points="0,-27.5 23.8,-13.7 23.8,13.7 0,27.5 -23.8,13.7 -23.8,-13.7" fill="#FF5E1A"/>
+            <polygon points="0,14.4 -12.1,1.7 -7.3,-2.4 0,5.6 7.3,-2.4 12.1,1.7" fill="#12151B"/>
+            <polygon points="0,-11.2 -2.9,-4.1 2.9,-4.1" fill="#C8FF00"/>
+          </g>
+          <text x="100" y="56" fill="#12151B" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="40" letter-spacing="4">AEGIS</text>
+          <text x="101" y="78" fill="rgba(18,21,27,0.6)" font-family="'Inter', sans-serif" font-size="12" letter-spacing="0.5">The Smartest Shield in the Wild.</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 APP ICON / FAVICON -->
+  <section class="board">
+    <div class="board-head">
+      <div>
+        <div class="num">02 · DIGITAL ICON</div>
+        <h2>App icon &amp; favicon.</h2>
+      </div>
+      <p class="desc">iOS / Android tile uses orange ground with hex mark in obsidian to keep the silhouette readable on the home screen.</p>
+    </div>
+    <div class="board-body row-2">
+      <div class="scene">
+        <div class="scene-label">iOS HOME SCREEN · 60×60pt</div>
+        <div class="app-icon-frame">
+          <div class="app-icon">
+            <svg viewBox="-50 -50 100 100" width="110" height="110">
+              <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#12151B"/>
+              <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#FF5E1A"/>
+              <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#12151B"/>
+              <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+            </svg>
+          </div>
+          <div class="app-icon-name">AEGIS<small>GHOST TRAIL</small></div>
+        </div>
+      </div>
+      <div class="scene">
+        <div class="scene-label">BROWSER · TAB &amp; FAVICON</div>
+        <div class="browser-window">
+          <div class="browser-bar">
+            <div class="browser-dots"><span></span><span></span><span></span></div>
+            <div class="browser-tab">
+              <svg viewBox="-50 -50 100 100"><polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#FF5E1A"/><polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#12151B"/><polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#FF5E1A"/><polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/></svg>
+              aegis.io — The Smartest Shield in the Wild
+            </div>
+          </div>
+          <div class="browser-content">
+            <div class="url">aegis.io / index</div>
+            <h3>The Smartest Shield<br><span style="color: var(--aegis-orange);">in the Wild.</span></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 APPAREL / JACKET PATCH -->
+  <section class="board">
+    <div class="board-head">
+      <div>
+        <div class="num">03 · APPAREL</div>
+        <h2>Patch, tee, hang tag.</h2>
+      </div>
+      <p class="desc">Brand on-body. Embroidered chest patch, sublimated tee, and printed hangtag — three unique surfaces, one identity.</p>
+    </div>
+    <div class="board-body row-3">
+      <div class="scene patch-scene">
+        <div class="scene-label">JACKET CHEST PATCH</div>
+        <div class="jacket-fabric">
+          <div class="jacket-zipper"></div>
+          <div class="patch">
+            <svg viewBox="-50 -50 100 100" width="36" height="36">
+              <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#FF5E1A"/>
+              <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#12151B"/>
+              <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#FF5E1A"/>
+              <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+            </svg>
+            <div class="patch-text">AEGIS</div>
+          </div>
+        </div>
+      </div>
+      <div class="scene tee-scene">
+        <div class="scene-label">TEE · BACK PRINT</div>
+        <div class="tee">
+          <svg class="tee-svg" viewBox="0 0 320 368" preserveAspectRatio="xMidYMid meet">
+            <path d="M 60 60 L 110 30 Q 130 50 160 50 Q 190 50 210 30 L 260 60 L 290 110 L 240 130 L 240 350 L 80 350 L 80 130 L 30 110 Z"
+              fill="#0e1015" stroke="#1f232b" stroke-width="1"/>
+            <path d="M 110 30 Q 130 50 160 50 Q 190 50 210 30 L 200 60 Q 180 75 160 75 Q 140 75 120 60 Z" fill="#0a0c10"/>
+          </svg>
+          <div class="tee-print">
+            <svg viewBox="-50 -50 100 100" width="58" height="58">
+              <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#FF5E1A"/>
+              <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#12151B"/>
+              <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#FF5E1A"/>
+              <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+            </svg>
+            <div class="tee-print-text">AEGIS</div>
+            <div class="tee-print-tag">FIELD CREW · 04</div>
+          </div>
+        </div>
+      </div>
+      <div class="scene" style="background: linear-gradient(135deg, #2D333B, #181B22);">
+        <div class="scene-label">HANG TAG · PRINT</div>
+        <div class="hangtag">
+          <div class="hangtag-mark">
+            <svg viewBox="-50 -50 100 100" width="56" height="56">
+              <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#FF5E1A"/>
+              <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#12151B"/>
+              <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#FF5E1A"/>
+              <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+            </svg>
+          </div>
+          <div class="hangtag-text">AEGIS</div>
+          <div class="hangtag-tag">SHIELD JACKET · M</div>
+          <div class="hangtag-spec">
+            <b>SHELL</b> 70D Pertex® / <b>FILL</b> Recycled goose 800FP /
+            <b>BIO</b> Heart-rate, core temp, fall detection /
+            <b>PWR</b> 18hr active / 7d standby
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 PACKAGING -->
+  <section class="board">
+    <div class="board-head">
+      <div>
+        <div class="num">04 · PACKAGING</div>
+        <h2>Box system.</h2>
+      </div>
+      <p class="desc">Obsidian boxes with a single orange edge stripe — instantly identifiable on a shelf, modular across product tiers.</p>
+    </div>
+    <div class="board-body row-2">
+      <div class="scene" style="background: linear-gradient(160deg, #1f232b, #0e1015);">
+        <div class="scene-label">JACKET BOX · 320×420</div>
+        <div class="pkg-box">
+          <div class="pkg-top">
+            <svg viewBox="-50 -50 100 100" width="32" height="32">
+              <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#FF5E1A"/>
+              <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#12151B"/>
+              <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#FF5E1A"/>
+              <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+            </svg>
+            <div class="pkg-top-name">AEGIS</div>
+          </div>
+          <div class="pkg-product">
+            <small>SERIES 02 — APPAREL</small>
+            Shield<br>Jacket
+          </div>
+          <div class="pkg-bottom">
+            <span>SIZE M · GRAPHITE</span>
+            <span>SKU 02·SH·M·GR</span>
+          </div>
+        </div>
+      </div>
+      <div class="scene" style="background: linear-gradient(160deg, #1f232b, #0e1015);">
+        <div class="scene-label">DRONE BOX · 320×420</div>
+        <div class="pkg-box" style="border-left: 6px solid var(--signal-volt); padding-left: 24px;">
+          <div class="pkg-top">
+            <svg viewBox="-50 -50 100 100" width="32" height="32">
+              <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#FF5E1A"/>
+              <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#12151B"/>
+              <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#FF5E1A"/>
+              <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+            </svg>
+            <div class="pkg-top-name">AEGIS</div>
+          </div>
+          <div class="pkg-product">
+            <small>SERIES 04 — RESCUE</small>
+            Sentry<br>Drone
+          </div>
+          <div class="pkg-bottom">
+            <span>HEX-04 · ARCTIC</span>
+            <span>SKU 04·HX·04·AR</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 BUSINESS CARD + STATIONERY -->
+  <section class="board">
+    <div class="board-head">
+      <div>
+        <div class="num">05 · STATIONERY</div>
+        <h2>Business cards.</h2>
+      </div>
+      <p class="desc">Front in obsidian for the role, back in full Aegis Orange — flip is the signature gesture.</p>
+    </div>
+    <div class="board-body row-2">
+      <div class="scene" style="background: linear-gradient(135deg, #1a1d24, #0e1015);">
+        <div class="scene-label">BUSINESS CARD · 85×55mm</div>
+        <div class="biz-card-stack">
+          <div class="biz-card back">
+            <div class="biz-back-mark">
+              <svg viewBox="-50 -50 100 100" width="86" height="86">
+                <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#12151B"/>
+                <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#FF5E1A"/>
+                <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#12151B"/>
+                <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+              </svg>
+            </div>
+          </div>
+          <div class="biz-card front">
+            <div>
+              <div class="biz-name">Mara Okonkwo</div>
+              <div class="biz-role">FIELD ENGINEER · DRONE OPS</div>
+            </div>
+            <div class="biz-contact">
+              <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="610c0013002100040608124f080e">[email&#160;protected]</a><br>
+              +1 555 0124 · @aegis.field
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scene">
+        <div class="scene-label">SOCIAL · 1:1 POST</div>
+        <div class="social-post">
+          <div class="social-post-eyebrow">◆ AEGIS · FIELD REPORT 04</div>
+          <div class="social-post-headline">
+            Drone reached<br>
+            <em>3:42</em><br>
+            after the alert.
+          </div>
+          <div class="social-post-foot">
+            <span>NORTH CASCADES · ELEV 1842M</span>
+            <span style="color: var(--signal-volt);">◆ LIVE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 SIGNAGE / DRONE LIVERY -->
+  <section class="board">
+    <div class="board-head">
+      <div>
+        <div class="num">06 · ENVIRONMENT</div>
+        <h2>Trailhead signage &amp; drone livery.</h2>
+      </div>
+      <p class="desc">In the field, the brand reads at 50 feet. Big shapes, fewer words, Signal Volt for live status.</p>
+    </div>
+    <div class="board-body row-2">
+      <div class="scene signage-scene">
+        <div class="scene-label">TRAILHEAD KIOSK</div>
+        <div class="signage-board">
+          <div class="signage-top">
+            <svg viewBox="-50 -50 100 100" width="44" height="44">
+              <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#FF5E1A"/>
+              <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#12151B"/>
+              <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#FF5E1A"/>
+              <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+            </svg>
+            <div class="signage-emergency">SHIELD ACTIVE</div>
+          </div>
+          <div class="signage-headline">
+            You're protected<br>
+            <em>past this point.</em>
+          </div>
+          <div class="signage-meta">
+            <span>SECTOR 04 · NORTH FORK</span>
+            <span>RESPONSE 4MIN AVG</span>
+          </div>
+        </div>
+      </div>
+      <div class="scene drone-scene">
+        <div class="scene-label">DRONE LIVERY · TOP VIEW</div>
+        <div class="drone-body">
+          <svg viewBox="-180 -150 360 300" width="100%" height="100%">
+            <!-- arms -->
+            <g stroke="#2D333B" stroke-width="14" stroke-linecap="round" fill="none">
+              <line x1="-100" y1="-80" x2="-150" y2="-120"/>
+              <line x1="100" y1="-80" x2="150" y2="-120"/>
+              <line x1="-100" y1="80" x2="-150" y2="120"/>
+              <line x1="100" y1="80" x2="150" y2="120"/>
+            </g>
+            <!-- props -->
+            <g fill="rgba(45,51,59,0.5)" stroke="#3a414b" stroke-width="1">
+              <circle cx="-150" cy="-120" r="45"/>
+              <circle cx="150" cy="-120" r="45"/>
+              <circle cx="-150" cy="120" r="45"/>
+              <circle cx="150" cy="120" r="45"/>
+            </g>
+            <!-- prop spinners -->
+            <g stroke="rgba(200,255,0,0.25)" stroke-width="1" fill="none">
+              <circle cx="-150" cy="-120" r="42"/>
+              <circle cx="150" cy="-120" r="42"/>
+              <circle cx="-150" cy="120" r="42"/>
+              <circle cx="150" cy="120" r="42"/>
+            </g>
+            <!-- chassis hex -->
+            <polygon points="0,-100 87,-50 87,50 0,100 -87,50 -87,-50" fill="#12151B" stroke="#FF5E1A" stroke-width="3"/>
+            <!-- inner detail -->
+            <polygon points="0,-72 62,-36 62,36 0,72 -62,36 -62,-36" fill="none" stroke="#2D333B" stroke-width="1"/>
+            <!-- center mark -->
+            <g transform="translate(0, -10)">
+              <polygon points="0,-30 26,-15 26,15 0,30 -26,15 -26,-15" fill="#FF5E1A"/>
+              <polygon points="0,-21.6 18.7,-10.8 18.7,10.8 0,21.6 -18.7,10.8 -18.7,-10.8" fill="#12151B"/>
+              <polygon points="0,11.3 -9.5,1.3 -5.7,-1.9 0,4.4 5.7,-1.9 9.5,1.3" fill="#FF5E1A"/>
+              <polygon points="0,-8.8 -2.3,-3.2 2.3,-3.2" fill="#C8FF00"/>
+            </g>
+            <!-- tail wordmark -->
+            <text x="0" y="60" text-anchor="middle" fill="#FF5E1A" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="14" letter-spacing="3">AEGIS · HEX-04</text>
+            <!-- status leds -->
+            <circle cx="-60" cy="80" r="3" fill="#C8FF00"/>
+            <circle cx="60" cy="80" r="3" fill="#C8FF00"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 STICKER PACK -->
+  <section class="board">
+    <div class="board-head">
+      <div>
+        <div class="num">07 · MERCH</div>
+        <h2>Sticker pack.</h2>
+      </div>
+      <p class="desc">Three colorways for laptop lids, helmets, and water bottles. Same mark, three voices.</p>
+    </div>
+    <div class="board-body">
+      <div class="scene" style="background: linear-gradient(135deg, #1a1d24, #0e1015);">
+        <div class="scene-label">3" CIRCLE STICKERS</div>
+        <div class="stickers">
+          <div class="sticker sticker-1">
+            <svg viewBox="-50 -50 100 100" width="120" height="120">
+              <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#12151B"/>
+              <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#FF5E1A"/>
+              <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#12151B"/>
+              <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+            </svg>
+          </div>
+          <div class="sticker sticker-2">
+            <div class="sticker-text">SHIELD<br>ACTIVE</div>
+          </div>
+          <div class="sticker sticker-3">
+            <svg viewBox="-50 -50 100 100" width="120" height="120">
+              <polygon points="0,-42 36.4,-21 36.4,21 0,42 -36.4,21 -36.4,-21" fill="#FF5E1A"/>
+              <polygon points="0,-30.2 26.2,-15.1 26.2,15.1 0,30.2 -26.2,15.1 -26.2,-15.1" fill="#12151B"/>
+              <polygon points="0,15.8 -13.3,1.8 -8,-2.7 0,6.2 8,-2.7 13.3,1.8" fill="#FF5E1A"/>
+              <polygon points="0,-12.3 -3.2,-4.5 3.2,-4.5" fill="#C8FF00"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- DOWNLOAD CTA -->
+<section class="download-cta">
+  <div>
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.3em; color: var(--aegis-orange); text-transform: uppercase; margin-bottom: 16px;">◆ ASSETS · SVG</div>
+    <h2>Download the<br>logo files.</h2>
+    <p>Three SVG variants — primary lockup on light, lockup on dark, and the standalone hex mark. Vector, infinitely scalable, ready for print and digital.</p>
+  </div>
+  <div class="dl-list">
+    <a class="dl-row" href="aegis-logo.svg" download>
+      <div class="dl-info">
+        <div class="name">aegis-logo.svg</div>
+        <div class="meta">PRIMARY LOCKUP · LIGHT</div>
+      </div>
+      <div class="dl-arrow">↓ Download</div>
+    </a>
+    <a class="dl-row" href="aegis-logo-dark.svg" download>
+      <div class="dl-info">
+        <div class="name">aegis-logo-dark.svg</div>
+        <div class="meta">PRIMARY LOCKUP · DARK</div>
+      </div>
+      <div class="dl-arrow">↓ Download</div>
+    </a>
+    <a class="dl-row" href="aegis-mark.svg" download>
+      <div class="dl-info">
+        <div class="name">aegis-mark.svg</div>
+        <div class="meta">HEX MARK · STANDALONE</div>
+      </div>
+      <div class="dl-arrow">↓ Download</div>
+    </a>
+  </div>
+</section>
+
+<footer class="footer">
+  <div>AEGIS · MOCKUP BOARDS · V2.0</div>
+  <div>9 SURFACES · 1 IDENTITY</div>
+  <div style="color: var(--signal-volt);">◆ ACTIVE</div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</html>

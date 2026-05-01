@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AEGIS — The Smartest Shield in the Wild</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="brand-tokens.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-text);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  ::selection { background: rgba(200,255,0,0.3); color:#fff; }
+
+  /* ─── nav ─── */
+  .nav {
+    position: fixed; top:0; left:0; right:0; z-index: 100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 32px; backdrop-filter: blur(16px);
+    background: rgba(10,12,16,0.72); border-bottom: 1px solid var(--border-tertiary);
+  }
+  .nav-brand { display:flex; align-items:center; gap:10px; }
+  .nav-brand-name {
+    font-family: var(--font-display); font-weight:700; font-size:20px;
+    letter-spacing: 0.18em;
+  }
+  .nav-links { display:flex; gap:28px; }
+  .nav-links a {
+    color: var(--text-secondary); text-decoration:none; font-size: 13px;
+    font-family: var(--font-display); font-weight:600; letter-spacing:0.12em;
+    text-transform: uppercase; transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--signal-volt); }
+
+  /* ─── hero ─── */
+  .hero {
+    min-height: 100vh; padding: 120px 32px 80px; position: relative;
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    text-align:center; overflow:hidden;
+  }
+  .hero::before {
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(255,94,26,0.10), transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(200,255,0,0.06), transparent 40%);
+    pointer-events:none;
+  }
+  .topo-bg {
+    position: absolute; inset: 0; opacity: 0.18; pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.3em;
+    color: var(--aegis-orange); text-transform: uppercase; margin-bottom: 32px;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content:''; width:8px; height:8px; border-radius:50%;
+    background: var(--aegis-orange);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity:1;} 50%{opacity:0.4;} }
+  .hero-title {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(56px, 9vw, 144px); line-height: 0.95;
+    letter-spacing: -0.01em; margin: 0; max-width: 1100px;
+    position: relative;
+  }
+  .hero-title em {
+    font-style: normal; font-weight: 500;
+    background: linear-gradient(90deg, var(--aegis-orange), #FF8C5A);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .hero-tagline {
+    font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.25em;
+    color: var(--text-secondary); margin-top: 32px; text-transform: uppercase;
+  }
+  .hero-meta {
+    display:flex; gap: 48px; margin-top: 64px; flex-wrap: wrap; justify-content: center;
+    border-top: 1px solid var(--border-tertiary); padding-top: 32px;
+    max-width: 880px; width: 100%;
+  }
+  .hero-meta dt {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em;
+    color: var(--text-tertiary); text-transform: uppercase; margin-bottom:6px;
+  }
+  .hero-meta dd {
+    margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 18px;
+    color: var(--text-primary);
+  }
+
+  /* ─── section base ─── */
+  .section { padding: 120px 32px; max-width: 1280px; margin: 0 auto; position: relative; }
+  .section-head {
+    display:flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 64px; flex-wrap: wrap; gap: 24px;
+  }
+  .section-num {
+    font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.3em;
+    color: var(--aegis-orange); text-transform: uppercase;
+    display:flex; align-items:center; gap:10px;
+  }
+  .section-num::before {
+    content:''; width:8px; height:8px; border-radius:50%;
+    background: var(--aegis-orange);
+  }
+  .section-title {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: clamp(40px, 5vw, 64px); line-height: 1; letter-spacing: -0.01em;
+    margin-top: 12px; max-width: 800px;
+  }
+  .section-lede {
+    font-size: 18px; color: var(--text-secondary); max-width: 480px; margin-top: 12px;
+    align-self: flex-end;
+  }
+
+  /* ─── logo section ─── */
+  .logo-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 48px;
+  }
+  .logo-box {
+    border-radius: var(--radius-lg);
+    display:flex; align-items:center; justify-content:center;
+    padding: 80px 40px; min-height: 240px;
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    position: relative; overflow: hidden;
+  }
+  .logo-box::after {
+    content:''; position:absolute; top:0; left:-100%; width:50%; height:100%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.04), transparent);
+    transform: skewX(-20deg); transition: left 0.7s;
+  }
+  .logo-box:hover { transform: translateY(-4px); }
+  .logo-box:hover::after { left: 200%; }
+  .logo-dark { background: linear-gradient(145deg, #1A1E26, #12151B);
+    border:1px solid rgba(255,255,255,0.05); }
+  .logo-light { background: linear-gradient(145deg, #FFFFFF, #F5F7FA);
+    border:1px solid rgba(0,0,0,0.06); }
+  .logo-caption {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing:0.22em;
+    color: var(--text-tertiary); text-transform: uppercase;
+    position: absolute; top: 20px; left: 20px;
+  }
+
+  .logo-rules {
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    border-top: 1px solid var(--border-tertiary); padding-top: 48px;
+  }
+  .rule-card {
+    background: var(--bg-secondary); border: 1px solid var(--border-tertiary);
+    border-radius: var(--radius-md); padding: 24px;
+  }
+  .rule-card .label {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing:0.22em;
+    color: var(--signal-volt); text-transform: uppercase; margin-bottom: 12px;
+  }
+  .rule-card h4 {
+    font-family: var(--font-display); font-weight: 600; font-size: 18px;
+    margin: 0 0 8px;
+  }
+  .rule-card p { color: var(--text-secondary); font-size: 14px; margin: 0; line-height: 1.55; }
+
+  /* ─── palette ─── */
+  .palette {
+    display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .swatch {
+    border-radius: var(--radius-md); overflow: hidden;
+    background: var(--bg-secondary); border: 1px solid var(--border-tertiary);
+    transition: transform 0.3s, border-color 0.3s;
+    cursor: pointer; display: flex; flex-direction: column;
+  }
+  .swatch:hover { transform: translateY(-4px); border-color: var(--border-strong); }
+  .swatch-color { height: 160px; position: relative; }
+  .swatch-color::after {
+    content: attr(data-role);
+    position: absolute; top: 16px; left: 16px;
+    font-family: var(--font-mono); font-size: 10px; letter-spacing:0.22em;
+    color: rgba(255,255,255,0.6); text-transform: uppercase;
+    background: rgba(0,0,0,0.35); padding: 4px 8px; border-radius: 4px;
+    backdrop-filter: blur(6px);
+  }
+  .swatch-color.light::after { color: rgba(0,0,0,0.65); background: rgba(255,255,255,0.5); }
+  .swatch-info { padding: 18px 20px; }
+  .swatch-name { font-family: var(--font-display); font-weight: 600; font-size: 16px; margin-bottom: 4px; }
+  .swatch-hex { font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary); }
+
+  .palette-rules {
+    margin-top: 48px; display:grid; grid-template-columns: repeat(2, 1fr); gap: 24px;
+  }
+  .rule-pair {
+    background: var(--bg-secondary); border-radius: var(--radius-md);
+    border: 1px solid var(--border-tertiary); padding: 28px;
+  }
+  .rule-pair .lab {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing:0.22em;
+    color: var(--text-tertiary); text-transform: uppercase;
+  }
+  .rule-pair .lab.do { color: var(--signal-volt); }
+  .rule-pair .lab.dont { color: var(--aegis-orange); }
+  .rule-pair ul { margin: 16px 0 0; padding-left: 18px; color: var(--text-secondary); font-size: 14px; line-height: 1.7; }
+
+  /* ─── typography ─── */
+  .type-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .type-card {
+    background: var(--bg-secondary); border: 1px solid var(--border-tertiary);
+    border-radius: var(--radius-lg); padding: 40px;
+    transition: background 0.3s;
+  }
+  .type-card:hover { background: var(--bg-tertiary); }
+  .type-card .meta-label {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing:0.22em;
+    color: var(--signal-volt); text-transform: uppercase; margin-bottom: 24px;
+  }
+  .type-card .specimen {
+    font-size: 88px; line-height: 0.95; letter-spacing: -0.02em; margin-bottom: 24px;
+  }
+  .type-card.display .specimen { font-family: var(--font-display); font-weight: 700; }
+  .type-card.body .specimen { font-family: var(--font-text); font-weight: 500; }
+  .type-card .weights { display:flex; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+  .type-card .w-chip {
+    padding: 6px 10px; border:1px solid var(--border-tertiary); border-radius: 4px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary);
+  }
+  .type-card .meta { color: var(--text-secondary); font-size: 14px; line-height: 1.6; margin: 0; }
+
+  .type-scale {
+    margin-top: 48px; background: var(--bg-secondary); border: 1px solid var(--border-tertiary);
+    border-radius: var(--radius-lg); padding: 40px;
+  }
+  .scale-row {
+    display:grid; grid-template-columns: 90px 110px 1fr; gap: 24px;
+    padding: 18px 0; border-bottom: 1px solid var(--border-tertiary);
+    align-items: baseline;
+  }
+  .scale-row:last-child { border-bottom: none; }
+  .scale-row .name {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing:0.22em;
+    color: var(--text-tertiary); text-transform: uppercase;
+  }
+  .scale-row .meta-data {
+    font-family: var(--font-mono); font-size: 12px; color: var(--text-secondary);
+  }
+  .scale-row .sample {
+    font-family: var(--font-display); color: var(--text-primary); line-height: 1;
+  }
+
+  /* ─── voice / pills ─── */
+  .voice-block { display:grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+  .pill-row { display:flex; flex-wrap: wrap; gap: 12px; }
+  .pill {
+    padding: 12px 26px; border-radius: 30px; font-family: var(--font-display);
+    font-weight: 600; font-size: 15px; letter-spacing: 0.05em; text-transform: uppercase;
+    transition: all 0.3s; cursor: default;
+  }
+  .pill-dark {
+    background: var(--bg-secondary); color: var(--text-primary);
+    border: 1px solid var(--border-tertiary);
+  }
+  .pill-dark:hover { border-color: var(--signal-volt); color: var(--signal-volt); transform: translateY(-2px); }
+  .pill-orange {
+    background: var(--aegis-orange-soft); color: var(--aegis-orange);
+    border: 1px solid rgba(255,94,26,0.3);
+  }
+  .pill-orange:hover { background: var(--aegis-orange); color: #fff; transform: translateY(-2px); }
+
+  .voice-rules ul { margin: 0; padding-left: 20px; color: var(--text-secondary); line-height: 1.7; }
+  .voice-rules ul li { margin-bottom: 10px; }
+  .voice-rules ul li b { color: var(--text-primary); font-weight: 500; }
+
+  /* ─── deliverables ─── */
+  .deliverables {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+  }
+  .deliv-card {
+    display: block; text-decoration: none; color: inherit;
+    background: var(--bg-secondary); border: 1px solid var(--border-tertiary);
+    border-radius: var(--radius-lg); padding: 32px; min-height: 280px;
+    position: relative; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s;
+    display:flex; flex-direction: column; justify-content: space-between;
+  }
+  .deliv-card:hover { transform: translateY(-6px); border-color: var(--aegis-orange); }
+  .deliv-card .num {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em;
+    color: var(--aegis-orange); text-transform: uppercase;
+  }
+  .deliv-card h3 {
+    font-family: var(--font-display); font-weight: 600; font-size: 28px;
+    margin: 8px 0 16px; line-height: 1.1;
+  }
+  .deliv-card > div:first-child { display: flex; flex-direction: column; gap: 4px; }
+  .deliv-card > div:first-child p { margin-top: 4px; }
+  .deliv-card p { color: var(--text-secondary); font-size: 14px; margin: 0; }
+  .deliv-card .arrow {
+    margin-top: 24px; font-family: var(--font-mono); font-size: 12px;
+    letter-spacing: 0.22em; color: var(--signal-volt); text-transform: uppercase;
+    display:flex; align-items: center; gap: 8px;
+  }
+  .deliv-card .arrow svg { transition: transform 0.3s; }
+  .deliv-card:hover .arrow svg { transform: translateX(6px); }
+
+  /* ─── tagline closing ─── */
+  .tagline-box {
+    background: linear-gradient(135deg, var(--bg-secondary) 0%, #1A1E26 100%);
+    border-radius: var(--radius-lg);
+    padding: 96px 32px; text-align: center;
+    border: 1px solid var(--border-tertiary);
+    position: relative; overflow: hidden;
+    margin-top: 80px;
+  }
+  .tagline-box::before {
+    content:''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--aegis-orange), var(--signal-volt));
+  }
+  .tagline-text {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(40px, 6vw, 72px);
+    background: linear-gradient(90deg, #FFFFFF, #B0B8C1);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    letter-spacing: 0.01em; margin: 0;
+  }
+  .tagline-sub {
+    font-family: var(--font-mono); font-size: 12px; color: var(--text-tertiary);
+    text-transform: uppercase; letter-spacing: 0.25em; font-weight: 500;
+    margin-top: 16px;
+  }
+
+  /* ─── footer ─── */
+  .footer {
+    border-top: 1px solid var(--border-tertiary);
+    padding: 48px 32px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 24px;
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em;
+    color: var(--text-tertiary); text-transform: uppercase;
+    max-width: 1280px; margin: 0 auto;
+  }
+
+  /* responsive */
+  @media (max-width: 880px) {
+    .logo-grid, .palette, .palette-rules, .type-grid, .voice-block,
+    .deliverables, .logo-rules { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">
+    <svg viewBox="0 0 60 60" width="32" height="32">
+      <g transform="translate(30,30)">
+        <polygon points="0,-26 22.5,-13 22.5,13 0,26 -22.5,13 -22.5,-13" fill="#FF5E1A"/>
+        <polygon points="0,-19 16,-9.5 16,9.5 0,19 -16,9.5 -16,-9.5" fill="#12151B"/>
+        <polygon points="0,9.5 -8,1 -4.8,-1.6 0,3.6 4.8,-1.6 8,1" fill="#FF5E1A"/>
+        <polygon points="0,-7.5 -1.9,-2.7 1.9,-2.7" fill="#C8FF00"/>
+      </g>
+    </svg>
+    <div class="nav-brand-name">AEGIS</div>
+  </div>
+  <div class="nav-links">
+    <a href="#logo">Logo</a>
+    <a href="#palette">Palette</a>
+    <a href="#typography">Type</a>
+    <a href="#voice">Voice</a>
+    <a href="#deliverables">System</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <svg class="topo-bg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+    <g fill="none" stroke="#2D333B" stroke-width="0.8">
+      <path d="M-50 280 Q 400 220 800 280 T 1650 240"/>
+      <path d="M-50 360 Q 400 300 800 360 T 1650 320"/>
+      <path d="M-50 440 Q 400 380 800 440 T 1650 400"/>
+      <path d="M-50 520 Q 400 460 800 520 T 1650 480"/>
+      <path d="M-50 600 Q 400 540 800 600 T 1650 560"/>
+      <path d="M-50 680 Q 400 620 800 680 T 1650 640"/>
+      <path d="M-50 760 Q 400 700 800 760 T 1650 720"/>
+    </g>
+  </svg>
+  <div style="position:relative; z-index:1;">
+    <div class="hero-eyebrow">Brand System · v2.0 · 2026</div>
+    <h1 class="hero-title" style="margin-bottom: 48px;">The Smartest <em>Shield</em><br>in the Wild.</h1>
+    <div class="hero-tagline" style="margin-top: 0;">Hardware · Software · Identity</div>
+    <dl class="hero-meta">
+      <div><dt>Discipline</dt><dd>Outdoor Safety</dd></div>
+      <div><dt>Products</dt><dd>Jacket · Drone · App</dd></div>
+      <div><dt>Voice</dt><dd>Fearless · Precise</dd></div>
+      <div><dt>Status</dt><dd style="color:var(--signal-volt);">◆ ACTIVE</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- LOGO -->
+<section class="section" id="logo">
+  <div class="section-head">
+    <div>
+      <div class="section-num">01 · MARK</div>
+      <h2 class="section-title">A shield. A chevron. A signal.</h2>
+    </div>
+    <p class="section-lede">A six-sided orange shield holds an obsidian core. Inside, a chevron points home and a single Signal Volt triangle marks the alert vertex.</p>
+  </div>
+
+  <div class="logo-grid">
+    <div class="logo-box logo-dark">
+      <div class="logo-caption">Primary · on dark</div>
+      <svg viewBox="0 0 360 100" width="320">
+        <g transform="translate(45,50)">
+          <polygon points="0,-38 33,-19 33,19 0,38 -33,19 -33,-19" fill="#FF5E1A"/>
+          <polygon points="0,-27.5 23.8,-13.7 23.8,13.7 0,27.5 -23.8,13.7 -23.8,-13.7" fill="#12151B"/>
+          <polygon points="0,14.4 -12.1,1.7 -7.3,-2.4 0,5.6 7.3,-2.4 12.1,1.7" fill="#FF5E1A"/>
+          <polygon points="0,-11.2 -2.9,-4.1 2.9,-4.1" fill="#C8FF00"/>
+        </g>
+        <text x="100" y="56" fill="#FFFFFF" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="40" letter-spacing="4">AEGIS</text>
+        <text x="101" y="78" fill="#888" font-family="'Inter', sans-serif" font-size="12" letter-spacing="0.5">The Smartest Shield in the Wild.</text>
+      </svg>
+    </div>
+    <div class="logo-box logo-light">
+      <div class="logo-caption" style="color: rgba(0,0,0,0.45);">Primary · on light</div>
+      <svg viewBox="0 0 360 100" width="320">
+        <g transform="translate(45,50)">
+          <polygon points="0,-38 33,-19 33,19 0,38 -33,19 -33,-19" fill="#FF5E1A"/>
+          <polygon points="0,-27.5 23.8,-13.7 23.8,13.7 0,27.5 -23.8,13.7 -23.8,-13.7" fill="#12151B"/>
+          <polygon points="0,14.4 -12.1,1.7 -7.3,-2.4 0,5.6 7.3,-2.4 12.1,1.7" fill="#FF5E1A"/>
+          <polygon points="0,-11.2 -2.9,-4.1 2.9,-4.1" fill="#C8FF00"/>
+        </g>
+        <text x="100" y="56" fill="#12151B" font-family="'Rajdhani', sans-serif" font-weight="700" font-size="40" letter-spacing="4">AEGIS</text>
+        <text x="101" y="78" fill="#6B7685" font-family="'Inter', sans-serif" font-size="12" letter-spacing="0.5">The Smartest Shield in the Wild.</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="logo-rules">
+    <div class="rule-card">
+      <div class="label">Clear space</div>
+      <h4>1× hex height</h4>
+      <p>Reserve space equal to the shield's vertical height around all edges. Nothing crosses this perimeter.</p>
+    </div>
+    <div class="rule-card">
+      <div class="label">Minimum size</div>
+      <h4>32px digital · 12mm print</h4>
+      <p>Below this, the chevron and volt triangle lose definition. Use the hex-only mark instead.</p>
+    </div>
+    <div class="rule-card">
+      <div class="label">Configurations</div>
+      <h4>Hex · Wordmark · Lockup</h4>
+      <p>The hex stands alone for app icons and patches. The lockup is for headers and packaging.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PALETTE -->
+<section class="section" id="palette">
+  <div class="section-head">
+    <div>
+      <div class="section-num">02 · PALETTE</div>
+      <h2 class="section-title">Six colors. Three jobs.</h2>
+    </div>
+    <p class="section-lede">Aegis Orange signals presence. Signal Volt signals attention. Shield Obsidian holds everything else in disciplined silence.</p>
+  </div>
+
+  <div class="palette">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#FF5E1A;" data-role="Primary · Brand"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Aegis Orange</div>
+        <div class="swatch-hex">#FF5E1A · OKLCH 68 0.23 38</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#12151B; border-bottom: 1px solid var(--border-tertiary);" data-role="Foundation · Surface"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Shield Obsidian</div>
+        <div class="swatch-hex">#12151B</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color light" style="background:#C8FF00;" data-role="Accent · Signal"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Signal Volt</div>
+        <div class="swatch-hex">#C8FF00</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#2D333B;" data-role="Neutral · Mid"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Terrain Graphite</div>
+        <div class="swatch-hex">#2D333B</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color light" style="background:#E8ECF0;" data-role="Neutral · Light"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Summit Frost</div>
+        <div class="swatch-hex">#E8ECF0</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#6B7685;" data-role="Neutral · Soft"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Storm Slate</div>
+        <div class="swatch-hex">#6B7685</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="palette-rules">
+    <div class="rule-pair">
+      <div class="lab do">◆ DO</div>
+      <ul>
+        <li>Use Aegis Orange for primary CTAs and the brand mark only.</li>
+        <li>Reserve Signal Volt for live alerts, status indicators, and AR overlays.</li>
+        <li>Default surfaces to Shield Obsidian — let the brand colors do the talking.</li>
+      </ul>
+    </div>
+    <div class="rule-pair">
+      <div class="lab dont">◆ DON'T</div>
+      <ul>
+        <li>Never tint Aegis Orange or Signal Volt — they're absolute, not gradients.</li>
+        <li>Don't pair Orange and Volt as adjacent fills; they're meant to take turns.</li>
+        <li>Don't use Volt for body text — it's signal-only, never reading copy.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TYPOGRAPHY -->
+<section class="section" id="typography">
+  <div class="section-head">
+    <div>
+      <div class="section-num">03 · TYPOGRAPHY</div>
+      <h2 class="section-title">Two voices.<br>One reading hierarchy.</h2>
+    </div>
+    <p class="section-lede">Rajdhani is the headline — geometric, technical, fearless. Inter is the body — humanist, legible, patient. They hold opposite jobs and never swap.</p>
+  </div>
+
+  <div class="type-grid">
+    <div class="type-card display">
+      <div class="meta-label">Display · Headline</div>
+      <div class="specimen">Rajdhani</div>
+      <div class="weights">
+        <span class="w-chip">400 Regular</span>
+        <span class="w-chip">500 Medium</span>
+        <span class="w-chip">600 SemiBold</span>
+        <span class="w-chip">700 Bold</span>
+      </div>
+      <p class="meta">Headlines, brand wordmark, navigation, CTAs, numerical displays. Tight letter-spacing for marquee titles, generous tracking for ALL-CAPS labels.</p>
+    </div>
+    <div class="type-card body">
+      <div class="meta-label">Body · UI</div>
+      <div class="specimen">Inter</div>
+      <div class="weights">
+        <span class="w-chip">300 Light</span>
+        <span class="w-chip">400 Regular</span>
+        <span class="w-chip">500 Medium</span>
+        <span class="w-chip">600 SemiBold</span>
+      </div>
+      <p class="meta">Paragraph text, UI copy, captions, form labels. Variable axes available for fine optical adjustment in dense data views.</p>
+    </div>
+  </div>
+
+  <div class="type-scale">
+    <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 16px;">§ TYPE SCALE — RAJDHANI</div>
+    <div class="scale-row">
+      <div class="name">Display</div><div class="meta-data">72 / 0.95 / 700</div>
+      <div class="sample" style="font-size: 64px; font-weight: 700; letter-spacing: -0.01em;">Smartest Shield</div>
+    </div>
+    <div class="scale-row">
+      <div class="name">H1</div><div class="meta-data">48 / 1.05 / 600</div>
+      <div class="sample" style="font-size: 44px; font-weight: 600;">Built for the cold.</div>
+    </div>
+    <div class="scale-row">
+      <div class="name">H2</div><div class="meta-data">32 / 1.15 / 600</div>
+      <div class="sample" style="font-size: 30px; font-weight: 600;">Drone dispatched in 3:42.</div>
+    </div>
+    <div class="scale-row">
+      <div class="name">H3</div><div class="meta-data">22 / 1.3 / 500</div>
+      <div class="sample" style="font-size: 22px; font-weight: 500;">Connected. Ready. Watching.</div>
+    </div>
+    <div class="scale-row">
+      <div class="name">Label</div><div class="meta-data">12 / 1.2 / 600 · UPPER</div>
+      <div class="sample" style="font-size: 12px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;">CORE TEMPERATURE · LIVE</div>
+    </div>
+  </div>
+</section>
+
+<!-- VOICE -->
+<section class="section" id="voice">
+  <div class="section-head">
+    <div>
+      <div class="section-num">04 · VOICE</div>
+      <h2 class="section-title">Fearless.<br>Precise.</h2>
+    </div>
+    <p class="section-lede">We speak in short, declarative sentences. We never panic. When the situation is critical, the words get shorter — not louder.</p>
+  </div>
+
+  <div class="voice-block">
+    <div>
+      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 20px;">§ BRAND PERSONALITY</div>
+      <div class="pill-row">
+        <span class="pill pill-dark">Innovative</span>
+        <span class="pill pill-dark">Trustworthy</span>
+        <span class="pill pill-dark">Sharp</span>
+        <span class="pill pill-orange">Fearless</span>
+        <span class="pill pill-orange">Precise</span>
+      </div>
+    </div>
+    <div class="voice-rules">
+      <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 20px;">§ WRITING RULES</div>
+      <ul>
+        <li><b>Lead with the action.</b> "Drone dispatched" — not "We've dispatched a drone."</li>
+        <li><b>Numbers earn their place.</b> If a stat is shown, it's accurate to its precision.</li>
+        <li><b>Calm in crisis.</b> Critical alerts use fewer words, larger type — never exclamation marks.</li>
+        <li><b>Plain over clever.</b> "Stay put. Help is coming." not "Hang tight, cavalry's en route."</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERABLES -->
+<section class="section" id="deliverables">
+  <div class="section-head">
+    <div>
+      <div class="section-num">05 · SYSTEM IN USE</div>
+      <h2 class="section-title">One identity.<br>Three surfaces.</h2>
+    </div>
+    <p class="section-lede">The same hand that drew the chevron designed the jacket, the drone, the app, and the dashboard. Each piece is a face of the same shield.</p>
+  </div>
+
+  <div class="deliverables">
+    <a class="deliv-card" href="AEGIS Trek - Brand System.html">
+      <div>
+        <div class="num">01 · BRAND SYSTEM</div>
+        <h3>Foundation deck</h3>
+        <p>Logo, palette, typography, tokens, and voice — twelve slides walking through the whole identity.</p>
+      </div>
+      <div class="arrow">Open deck
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M9 1l4 4-4 4M0 5h13" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+    </a>
+    <a class="deliv-card" href="AEGIS Trek - Industrial Design.html">
+      <div>
+        <div class="num">02 · INDUSTRIAL</div>
+        <h3>Jacket &amp; drone</h3>
+        <p>Smart jacket exterior + interior, thermochromic states, hexagonal drone chassis, LED state system.</p>
+      </div>
+      <div class="arrow">Open boards
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M9 1l4 4-4 4M0 5h13" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+    </a>
+    <a class="deliv-card" href="AEGIS Trek - Ghost Trail.html">
+      <div>
+        <div class="num">03 · MOBILE</div>
+        <h3>Ghost Trail app</h3>
+        <p>Five iOS screens — companion home, critical alert, drone approach map, BLE pairing, trip summary.</p>
+      </div>
+      <div class="arrow">Open prototype
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M9 1l4 4-4 4M0 5h13" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+    </a>
+    <a class="deliv-card" href="AEGIS Trek - MedLink.html">
+      <div>
+        <div class="num">04 · WEB</div>
+        <h3>MedLink dashboard</h3>
+        <p>Dispatcher's view of the fleet — patient roster, live biometrics, drone tracking, incident reports.</p>
+      </div>
+      <div class="arrow">Open dashboard
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M9 1l4 4-4 4M0 5h13" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+    </a>
+    <a class="deliv-card" href="AEGIS - Brand Mockups.html">
+      <div>
+        <div class="num">05 · MOCKUPS</div>
+        <h3>Brand in the wild</h3>
+        <p>Apparel patches, packaging, app icon, signage, business cards, drone livery — identity applied across nine surfaces.</p>
+      </div>
+      <div class="arrow">Open boards
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><path d="M9 1l4 4-4 4M0 5h13" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+    </a>
+    <div class="deliv-card" style="cursor: default; border-style: dashed;">
+      <div>
+        <div class="num" style="color: var(--text-tertiary);">06 · DOCS</div>
+        <h3 style="color: var(--text-secondary);">System docs</h3>
+        <p>Component status matrix, accessibility checklist, platform adaptation notes, contribution guide.</p>
+      </div>
+      <div class="arrow" style="color: var(--text-tertiary);">Coming soon</div>
+    </div>
+  </div>
+
+  <div class="tagline-box">
+    <div class="tagline-text">The Smartest Shield in the Wild.</div>
+    <div class="tagline-sub">Primary tagline · Always sentence case · Always followed by a period</div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div>AEGIS · BRAND SYSTEM · V2.0 · 2026</div>
+  <div>N 47°36'35" · W 121°46'12" · ELEV 1842 M</div>
+  <div style="color: var(--signal-volt);">◆ INTERNAL HANDOFF</div>
+</footer>
+
+</body>
+</html>
