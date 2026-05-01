@@ -33,13 +33,26 @@ function ShowcaseCarousel({ title, subtitle, screens, isMobile }) {
         pointerEvents: 'none', zIndex: 0
       }}></div>
 
+      {/* Back Button */}
+      <a href="index.html" style={{
+        position: 'absolute', top: 32, left: 32, zIndex: 20,
+        display: 'inline-flex', alignItems: 'center', gap: 8,
+        padding: '10px 20px', background: 'rgba(255,255,255,0.05)', backdropFilter: 'blur(10px)',
+        border: '1px solid rgba(255,255,255,0.1)', borderRadius: 100,
+        color: '#fff', textDecoration: 'none',
+        fontFamily: 'Inter, sans-serif', fontSize: 13, letterSpacing: '0.1em',
+        textTransform: 'uppercase', transition: 'all 0.2s', fontWeight: 500
+      }} onMouseOver={e => {e.currentTarget.style.borderColor='#FF5E1A'; e.currentTarget.style.color='#FF5E1A'}} onMouseOut={e => {e.currentTarget.style.borderColor='rgba(255,255,255,0.1)'; e.currentTarget.style.color='#fff'}}>
+        ← Back to Home
+      </a>
+
       {/* Header */}
-      <div style={{ padding: '40px 60px', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <div style={{ padding: '80px 60px 20px', zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', pointerEvents: 'none' }}>
         <div>
           <div style={{ color: '#FF5E1A', fontSize: 13, letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: 12, fontFamily: 'ui-monospace, SFMono-Regular, monospace' }}>{subtitle}</div>
           <h1 style={{ margin: 0, fontSize: 36, fontWeight: 700, letterSpacing: '-0.02em', fontFamily: 'Rajdhani, sans-serif' }}>{title}</h1>
         </div>
-        <div style={{ display: 'flex', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 12, pointerEvents: 'auto' }}>
           <button onClick={prev} style={btnStyle} onMouseOver={e => e.currentTarget.style.borderColor = '#FF5E1A'} onMouseOut={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}>← Prev</button>
           <button onClick={next} style={btnStyle} onMouseOver={e => e.currentTarget.style.borderColor = '#FF5E1A'} onMouseOut={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'}>Next →</button>
         </div>
