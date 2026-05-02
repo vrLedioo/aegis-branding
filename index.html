@@ -348,6 +348,127 @@
     .deliverables, .logo-rules { grid-template-columns: 1fr; }
     .nav-links { display: none; }
   }
+
+  /* ══════════════════════════════════════════════
+     MOTION SYSTEM
+  ══════════════════════════════════════════════ */
+  @keyframes aegisFadeUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes aegisLineGrow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-inner > *, .reveal, .reveal-stagger > * {
+      animation: none !important;
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .nav-progress { display: none; }
+  }
+
+  /* Hero — stagger children in on load */
+  .hero-inner > * { animation: aegisFadeUp 0.9s cubic-bezier(0.16,1,0.3,1) both; }
+  .hero-inner > *:nth-child(1) { animation-delay: .06s; }
+  .hero-inner > *:nth-child(2) { animation-delay: .16s; }
+  .hero-inner > *:nth-child(3) { animation-delay: .24s; }
+  .hero-inner > *:nth-child(4) { animation-delay: .30s; }
+  .hero-inner > *:nth-child(5) { animation-delay: .36s; }
+  .hero-inner > *:nth-child(6) { animation-delay: .44s; }
+
+  /* Scroll reveal — single element */
+  .reveal {
+    opacity: 0; transform: translateY(22px);
+    transition: opacity .7s cubic-bezier(0.16,1,.3,1), transform .7s cubic-bezier(0.16,1,.3,1);
+  }
+  .reveal.in-view { opacity: 1; transform: none; }
+
+  /* Scroll reveal — staggered grid children */
+  .reveal-stagger > * {
+    opacity: 0; transform: translateY(16px);
+    transition: opacity .55s cubic-bezier(0.16,1,.3,1), transform .55s cubic-bezier(0.16,1,.3,1);
+  }
+  .reveal-stagger.in-view > *:nth-child(1) { opacity:1; transform:none; transition-delay:.04s; }
+  .reveal-stagger.in-view > *:nth-child(2) { opacity:1; transform:none; transition-delay:.10s; }
+  .reveal-stagger.in-view > *:nth-child(3) { opacity:1; transform:none; transition-delay:.16s; }
+  .reveal-stagger.in-view > *:nth-child(4) { opacity:1; transform:none; transition-delay:.22s; }
+  .reveal-stagger.in-view > *:nth-child(5) { opacity:1; transform:none; transition-delay:.28s; }
+  .reveal-stagger.in-view > *:nth-child(6) { opacity:1; transform:none; transition-delay:.34s; }
+
+  /* ══════════════════════════════════════════════
+     NAV ENHANCEMENTS
+  ══════════════════════════════════════════════ */
+  .nav { overflow: visible; }
+  .nav-progress {
+    position: absolute; bottom: -1px; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--aegis-orange), var(--signal-volt));
+    transform-origin: left; transform: scaleX(0); will-change: transform;
+    pointer-events: none; border-radius: 0 2px 2px 0;
+    animation: aegisLineGrow .4s cubic-bezier(0.16,1,.3,1) .6s both;
+  }
+  .nav-links a { position: relative; transition: color .2s; }
+  .nav-links a.active { color: var(--text-primary); }
+  .nav-links a.active::after {
+    content: ''; position: absolute; bottom: -6px; left: 50%;
+    transform: translateX(-50%);
+    width: 4px; height: 4px; border-radius: 50%; background: var(--aegis-orange);
+    animation: aegisFadeUp .25s ease both;
+  }
+
+  /* ══════════════════════════════════════════════
+     CTA BUTTONS
+  ══════════════════════════════════════════════ */
+  .cta-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--aegis-orange); color: #fff; text-decoration: none;
+    font-family: var(--font-display); font-weight: 600; font-size: 15px;
+    letter-spacing: .1em; text-transform: uppercase; padding: 16px 32px;
+    border-radius: 30px; cursor: pointer;
+    transition: transform .25s cubic-bezier(0.16,1,.3,1), background .2s, box-shadow .2s;
+    box-shadow: 0 8px 24px rgba(255,94,26,.25);
+  }
+  .cta-btn:hover { transform: translateY(-3px); background: #FF7338; box-shadow: 0 14px 36px rgba(255,94,26,.38); }
+  .cta-btn:active { transform: translateY(-1px); }
+  .hero-btns { margin-top: 40px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+
+  /* ══════════════════════════════════════════════
+     PALETTE — COPY INTERACTION
+  ══════════════════════════════════════════════ */
+  .swatch { cursor: pointer; position: relative; }
+  .swatch-copy-hint {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px 20px; border-top: 1px solid var(--border-tertiary);
+    font-family: var(--font-mono); font-size: 10px; letter-spacing: .2em;
+    color: var(--text-tertiary); text-transform: uppercase;
+    transition: color .2s, background .2s;
+  }
+  .swatch:hover .swatch-copy-hint { color: var(--text-secondary); }
+  .swatch.copied .swatch-copy-hint {
+    color: #12151B; background: var(--signal-volt);
+    border-top-color: var(--signal-volt);
+  }
+  .swatch-copy-hint svg { flex-shrink: 0; transition: opacity .2s; }
+  .swatch.copied .swatch-copy-hint svg { display: none; }
+
+  /* ══════════════════════════════════════════════
+     DELIVERABLES — hover glow
+  ══════════════════════════════════════════════ */
+  .deliv-card[href]:hover {
+    box-shadow: 0 0 0 1px var(--aegis-orange), 0 16px 48px rgba(255,94,26,.12);
+  }
+
+  /* ══════════════════════════════════════════════
+     SECTION DIVIDERS
+  ══════════════════════════════════════════════ */
+  .section + .section::before {
+    content: ''; display: block; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-tertiary), transparent);
+    margin: 0 32px;
+    transform: translateY(-120px);
+  }
 </style>
 </head>
 <body>
@@ -371,6 +492,7 @@
     <a href="#voice">Voice</a>
     <a href="#deliverables">System</a>
   </div>
+  <div class="nav-progress"></div>
 </nav>
 
 <!-- HERO -->
@@ -386,22 +508,16 @@
       <path d="M-50 760 Q 400 700 800 760 T 1650 720"/>
     </g>
   </svg>
-  <div style="position:relative; z-index:1;">
+  <div class="hero-inner" style="position:relative; z-index:1;">
     <div class="hero-eyebrow">Brand System · v2.0 · 2026</div>
     <h1 class="hero-title" style="margin-bottom: 48px;">The Smartest <em>Shield</em><br>in the Wild.</h1>
     <div class="hero-tagline" style="margin-top: 0;">Hardware · Software · Identity</div>
     <p style="font-size: 15px; color: var(--text-secondary); max-width: 600px; margin: 28px auto 0; line-height: 1.7; font-family: var(--font-text);">AEGIS builds smart outdoor safety equipment — sensor-embedded jackets, autonomous rescue drones, and the connected software that links them. This document defines how the brand looks, speaks, and behaves across every surface.</p>
 
-    <div style="margin-top: 40px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;">
-      <a href="AEGIS - Brand Mockups.html" style="display: inline-block; background: var(--aegis-orange); color: #fff; text-decoration: none; font-family: var(--font-display); font-weight: 600; font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; padding: 16px 32px; border-radius: 30px; transition: transform 0.2s, background 0.2s; box-shadow: 0 8px 24px rgba(255, 94, 26, 0.25);" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#ff7338'" onmouseout="this.style.transform='none'; this.style.background='var(--aegis-orange)'">
-        View Mockups
-      </a>
-      <a href="AEGIS Trek - Ghost Trail.html" style="display: inline-block; background: var(--aegis-orange); color: #fff; text-decoration: none; font-family: var(--font-display); font-weight: 600; font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; padding: 16px 32px; border-radius: 30px; transition: transform 0.2s, background 0.2s; box-shadow: 0 8px 24px rgba(255, 94, 26, 0.25);" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#ff7338'" onmouseout="this.style.transform='none'; this.style.background='var(--aegis-orange)'">
-        Ghost Trail App
-      </a>
-      <a href="AEGIS Trek - MedLink.html" style="display: inline-block; background: var(--aegis-orange); color: #fff; text-decoration: none; font-family: var(--font-display); font-weight: 600; font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase; padding: 16px 32px; border-radius: 30px; transition: transform 0.2s, background 0.2s; box-shadow: 0 8px 24px rgba(255, 94, 26, 0.25);" onmouseover="this.style.transform='translateY(-2px)'; this.style.background='#ff7338'" onmouseout="this.style.transform='none'; this.style.background='var(--aegis-orange)'">
-        MedLink Dashboard
-      </a>
+    <div class="hero-btns">
+      <a href="AEGIS - Brand Mockups.html" class="cta-btn">View Brand Mockups</a>
+      <a href="AEGIS Trek - Ghost Trail.html" class="cta-btn">Ghost Trail App</a>
+      <a href="AEGIS Trek - MedLink.html" class="cta-btn">MedLink Dashboard</a>
     </div>
 
     <dl class="hero-meta">
@@ -423,7 +539,7 @@
     <p class="section-lede">A six-sided orange shield holds an obsidian core. Inside, a chevron points home and a single Signal Volt triangle marks the alert vertex.</p>
   </div>
 
-  <div class="logo-grid">
+  <div class="logo-grid reveal-stagger">
     <div class="logo-box logo-dark">
       <div class="logo-caption">Primary · on dark</div>
       <svg viewBox="0 0 360 100" width="320">
@@ -452,7 +568,7 @@
     </div>
   </div>
 
-  <div class="logo-rules">
+  <div class="logo-rules reveal-stagger">
     <div class="rule-card">
       <div class="label">Clear space</div>
       <h4>1× hex height</h4>
@@ -481,52 +597,58 @@
     <p class="section-lede">Aegis Orange signals presence. Signal Volt signals attention. Shield Obsidian holds everything else in disciplined silence.</p>
   </div>
 
-  <div class="palette">
-    <div class="swatch">
+  <div class="palette reveal-stagger">
+    <div class="swatch" title="Click to copy hex">
       <div class="swatch-color" style="background:#FF5E1A;" data-role="Primary · Brand"></div>
       <div class="swatch-info">
         <div class="swatch-name">Aegis Orange</div>
         <div class="swatch-hex">#FF5E1A · OKLCH 68 0.23 38</div>
       </div>
+      <div class="swatch-copy-hint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M8 4V2.5A.5.5 0 007.5 2h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5H4" stroke="currentColor" stroke-width="1.2"/></svg>#FF5E1A</div>
     </div>
-    <div class="swatch">
+    <div class="swatch" title="Click to copy hex">
       <div class="swatch-color" style="background:#12151B; border-bottom: 1px solid var(--border-tertiary);" data-role="Foundation · Surface"></div>
       <div class="swatch-info">
         <div class="swatch-name">Shield Obsidian</div>
         <div class="swatch-hex">#12151B</div>
       </div>
+      <div class="swatch-copy-hint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M8 4V2.5A.5.5 0 007.5 2h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5H4" stroke="currentColor" stroke-width="1.2"/></svg>#12151B</div>
     </div>
-    <div class="swatch">
+    <div class="swatch" title="Click to copy hex">
       <div class="swatch-color light" style="background:#C8FF00;" data-role="Accent · Signal"></div>
       <div class="swatch-info">
         <div class="swatch-name">Signal Volt</div>
         <div class="swatch-hex">#C8FF00</div>
       </div>
+      <div class="swatch-copy-hint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M8 4V2.5A.5.5 0 007.5 2h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5H4" stroke="currentColor" stroke-width="1.2"/></svg>#C8FF00</div>
     </div>
-    <div class="swatch">
+    <div class="swatch" title="Click to copy hex">
       <div class="swatch-color" style="background:#2D333B;" data-role="Neutral · Mid"></div>
       <div class="swatch-info">
         <div class="swatch-name">Terrain Graphite</div>
         <div class="swatch-hex">#2D333B</div>
       </div>
+      <div class="swatch-copy-hint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M8 4V2.5A.5.5 0 007.5 2h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5H4" stroke="currentColor" stroke-width="1.2"/></svg>#2D333B</div>
     </div>
-    <div class="swatch">
+    <div class="swatch" title="Click to copy hex">
       <div class="swatch-color light" style="background:#E8ECF0;" data-role="Neutral · Light"></div>
       <div class="swatch-info">
         <div class="swatch-name">Summit Frost</div>
         <div class="swatch-hex">#E8ECF0</div>
       </div>
+      <div class="swatch-copy-hint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M8 4V2.5A.5.5 0 007.5 2h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5H4" stroke="currentColor" stroke-width="1.2"/></svg>#E8ECF0</div>
     </div>
-    <div class="swatch">
+    <div class="swatch" title="Click to copy hex">
       <div class="swatch-color" style="background:#6B7685;" data-role="Neutral · Soft"></div>
       <div class="swatch-info">
         <div class="swatch-name">Storm Slate</div>
         <div class="swatch-hex">#6B7685</div>
       </div>
+      <div class="swatch-copy-hint"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="4" y="4" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M8 4V2.5A.5.5 0 007.5 2h-5a.5.5 0 00-.5.5v5a.5.5 0 00.5.5H4" stroke="currentColor" stroke-width="1.2"/></svg>#6B7685</div>
     </div>
   </div>
 
-  <div class="palette-rules">
+  <div class="palette-rules reveal-stagger">
     <div class="rule-pair">
       <div class="lab do">◆ DO</div>
       <ul>
@@ -556,7 +678,7 @@
     <p class="section-lede">Rajdhani is the headline — geometric, technical, fearless. Inter is the body — humanist, legible, patient. They hold opposite jobs and never swap.</p>
   </div>
 
-  <div class="type-grid">
+  <div class="type-grid reveal-stagger">
     <div class="type-card display">
       <div class="meta-label">Display · Headline</div>
       <div class="specimen">Rajdhani</div>
@@ -581,7 +703,7 @@
     </div>
   </div>
 
-  <div class="type-scale">
+  <div class="type-scale reveal">
     <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 16px;">§ TYPE SCALE — RAJDHANI</div>
     <div class="scale-row">
       <div class="name">Display</div><div class="meta-data">72 / 0.95 / 700</div>
@@ -616,7 +738,7 @@
     <p class="section-lede">We speak in short, declarative sentences. We never panic. When the situation is critical, the words get shorter — not louder.</p>
   </div>
 
-  <div class="voice-block">
+  <div class="voice-block reveal">
     <div>
       <div style="font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em; color: var(--text-tertiary); text-transform: uppercase; margin-bottom: 20px;">§ BRAND PERSONALITY</div>
       <div class="pill-row">
@@ -649,7 +771,7 @@
     <p class="section-lede">The same hand that drew the chevron designed the jacket, the drone, the app, and the dashboard. Each piece is a face of the same shield.</p>
   </div>
 
-  <div class="deliverables">
+  <div class="deliverables reveal-stagger">
     <div class="deliv-card" style="cursor: default; border-style: dashed;">
       <div>
         <div class="num" style="color: var(--text-tertiary);">01 · BRAND SYSTEM</div>
@@ -706,7 +828,7 @@
     </div>
   </div>
 
-  <div class="tagline-box">
+  <div class="tagline-box reveal">
     <div class="tagline-text">The Smartest Shield in the Wild.</div>
     <div class="tagline-sub">Primary tagline · Always sentence case · Always followed by a period</div>
   </div>
@@ -718,5 +840,47 @@
   <div style="color: var(--signal-volt);">◆ INTERNAL HANDOFF</div>
 </footer>
 
+<script>
+(function () {
+  /* ── Scroll reveal ── */
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('in-view'); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => io.observe(el));
+
+  /* ── Nav progress bar + scroll-spy ── */
+  const progress = document.querySelector('.nav-progress');
+  const navLinks = [...document.querySelectorAll('.nav-links a[href^="#"]')];
+  const sections = navLinks.map(a => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+
+  window.addEventListener('scroll', () => {
+    /* progress */
+    if (progress) {
+      const max = document.body.scrollHeight - window.innerHeight;
+      progress.style.transform = `scaleX(${Math.min(window.scrollY / max, 1)})`;
+    }
+    /* active section */
+    let activeId = sections[0]?.id ?? '';
+    sections.forEach(s => { if (window.scrollY + 200 >= s.offsetTop) activeId = s.id; });
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + activeId));
+  }, { passive: true });
+
+  /* ── Palette hex copy ── */
+  document.querySelectorAll('.swatch').forEach(sw => {
+    sw.addEventListener('click', () => {
+      const hint = sw.querySelector('.swatch-copy-hint');
+      if (!hint) return;
+      const hex = hint.textContent.trim();
+      navigator.clipboard?.writeText(hex).catch(() => {});
+      const orig = hint.innerHTML;
+      hint.innerHTML = '✓ Copied!';
+      sw.classList.add('copied');
+      setTimeout(() => { sw.classList.remove('copied'); hint.innerHTML = orig; }, 2000);
+    });
+  });
+})();
+</script>
 </body>
 </html>
