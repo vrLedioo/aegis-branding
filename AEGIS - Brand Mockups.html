@@ -30,7 +30,9 @@
   }
   .page-head .eyebrow::before {
     content:''; width:8px; height:8px; border-radius:50%; background: var(--aegis-orange);
+    animation: pulse 2s ease-in-out infinite;
   }
+  @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:.4;} }
   .page-head h1 {
     font-family: var(--font-display); font-weight: 700;
     font-size: clamp(48px, 7vw, 96px); line-height: 0.95; margin: 0;
@@ -435,18 +437,10 @@
     position: sticky; top: 0; z-index: 50;
     background: rgba(10,12,16,0.88); backdrop-filter: blur(16px);
     border-bottom: 1px solid var(--border-tertiary);
-    margin: 32px -48px 0; padding: 12px 48px;
+    padding: 12px 48px;
   }
   .board-nav {
     display: flex; gap: 8px; flex-wrap: wrap;
-    border-top: 1px solid var(--border-tertiary); padding-top: 16px;
-    margin-top: 0;
-  }
-  /* in the page-head the nav starts non-sticky; becomes sticky on scroll */
-  .page-head .board-nav {
-    position: static; background: none; backdrop-filter: none;
-    border-bottom: none; margin: 0; padding: 0;
-    border-top: 1px solid var(--border-tertiary); padding-top: 32px; margin-top: 32px;
   }
   .board-nav a {
     padding: 7px 14px; background: var(--bg-secondary);
@@ -491,6 +485,9 @@
     <span>SURFACES<b>Apparel · Print · Digital · Hardware</b></span>
     <span>STATUS<b style="color: var(--signal-volt);">◆ ACTIVE</b></span>
   </div>
+</header>
+
+<div class="board-nav-wrap">
   <nav class="board-nav">
     <a href="#board-marks">01 · Marks</a>
     <a href="#board-icon">02 · Digital Icon</a>
@@ -500,7 +497,7 @@
     <a href="#board-environment">06 · Environment</a>
     <a href="#board-merch">07 · Merch</a>
   </nav>
-</header>
+</div>
 
 <main class="boards">
 
@@ -749,7 +746,7 @@
               <div class="biz-role">FIELD ENGINEER · DRONE OPS</div>
             </div>
             <div class="biz-contact">
-              <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="610c0013002100040608124f080e">[email&#160;protected]</a><br>
+              mara@aegis.io<br>
               +1 555 0124 · @aegis.field
             </div>
           </div>
@@ -953,5 +950,5 @@
   <div style="color: var(--signal-volt);">◆ ACTIVE</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</body>
 </html>

@@ -432,6 +432,17 @@
   }
   .cta-btn:hover { transform: translateY(-3px); background: #FF7338; box-shadow: 0 14px 36px rgba(255,94,26,.38); }
   .cta-btn:active { transform: translateY(-1px); }
+  .cta-btn-ghost {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: transparent; color: var(--text-primary); text-decoration: none;
+    font-family: var(--font-display); font-weight: 600; font-size: 15px;
+    letter-spacing: .1em; text-transform: uppercase; padding: 16px 32px;
+    border-radius: 30px; cursor: pointer;
+    border: 1px solid var(--border-strong);
+    transition: transform .25s cubic-bezier(0.16,1,.3,1), border-color .2s, color .2s;
+  }
+  .cta-btn-ghost:hover { transform: translateY(-3px); border-color: var(--aegis-orange); color: var(--aegis-orange); }
+  .cta-btn-ghost:active { transform: translateY(-1px); }
   .hero-btns { margin-top: 40px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
 
   /* ══════════════════════════════════════════════
@@ -516,8 +527,8 @@
 
     <div class="hero-btns">
       <a href="AEGIS - Brand Mockups.html" class="cta-btn">View Brand Mockups</a>
-      <a href="AEGIS Trek - Ghost Trail.html" class="cta-btn">Ghost Trail App</a>
-      <a href="AEGIS Trek - MedLink.html" class="cta-btn">MedLink Dashboard</a>
+      <a href="AEGIS Trek - Ghost Trail.html" class="cta-btn-ghost">Ghost Trail App</a>
+      <a href="AEGIS Trek - MedLink.html" class="cta-btn-ghost">MedLink Dashboard</a>
     </div>
 
     <dl class="hero-meta">
