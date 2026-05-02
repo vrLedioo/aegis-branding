@@ -10,16 +10,58 @@
 <style>
   html,body { margin:0; padding:0; background:#05080F; color:#C8E8F0; font-family:'Inter',system-ui,sans-serif; min-height:100vh;}
   #root { min-height:100vh; }
+
+  /* intro context banner */
+  .intro-banner {
+    background: #080A0F;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    padding: 52px 60px 44px;
+  }
+  .intro-banner .eyebrow {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.3em; color: #FF5E1A; text-transform: uppercase;
+    margin-bottom: 14px; display: flex; align-items: center; gap: 10px;
+  }
+  .intro-banner .eyebrow::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%; background: #FF5E1A;
+    flex-shrink: 0;
+  }
+  .intro-banner h1 {
+    font-family: 'Chakra Petch', sans-serif; font-weight: 700;
+    font-size: clamp(32px, 5vw, 56px); color: #fff;
+    letter-spacing: -0.02em; margin: 0 0 16px; line-height: 1;
+  }
+  .intro-banner .desc {
+    font-size: 15px; color: rgba(200,232,240,0.55); line-height: 1.7;
+    max-width: 660px; margin-bottom: 28px;
+  }
+  .intro-banner .hint {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    letter-spacing: 0.2em; color: rgba(255,255,255,0.22); text-transform: uppercase;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .intro-banner .hint::before {
+    content: ''; display: block; width: 28px; height: 1px;
+    background: rgba(255,255,255,0.12); flex-shrink: 0;
+  }
 </style>
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 </head>
 <body>
+
+<div class="intro-banner">
+  <div class="eyebrow">AEGIS Trek · Web Dashboard · 1440 × 900</div>
+  <h1>MedLink</h1>
+  <p class="desc">The emergency dispatcher's command center. Gives medical response teams a real-time view of all active field users — monitoring live biometrics, tracking rescue drone locations, managing patient records, and documenting every incident from first alert through resolution. Built for the people who receive the call when Ghost Trail fires an alert.</p>
+  <div class="hint">5 key screens · Use ← → arrow keys or click the dots below to navigate</div>
+</div>
+
 <div id="root"></div>
-<script type="text/babel" src="browser-window.jsx"></script>
-<script type="text/babel" src="showcase-carousel.jsx"></script>
-<script type="text/babel" src="medlink-screens.jsx"></script>
+<script type="text/babel" src="components/browser-window.jsx"></script>
+<script type="text/babel" src="components/showcase-carousel.jsx"></script>
+<script type="text/babel" src="components/medlink-screens.jsx"></script>
 <script type="text/babel" data-presets="react">
 function Win({ url, children }) {
   return <ChromeWindow url={url} tabs={[{title:'MedLink — AEGIS Trek'}]} width={1440} height={900}>{children}</ChromeWindow>;
