@@ -18,11 +18,56 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  ::selection { background: rgba(200,255,0,0.3); color: #fff; }
+
+  /* ─── SITE NAV (matches home) ─── */
+  .nav {
+    position: fixed; top:0; left:0; right:0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 32px; backdrop-filter: blur(16px);
+    background: rgba(10,12,16,0.72); border-bottom: 1px solid var(--border-tertiary);
+  }
+  .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+  .nav-brand-name {
+    font-family: var(--font-display); font-weight: 700; font-size: 20px;
+    letter-spacing: 0.18em; color: var(--text-primary);
+  }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a {
+    color: var(--text-secondary); text-decoration: none; font-size: 13px;
+    font-family: var(--font-display); font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; transition: color 0.2s; position: relative;
+  }
+  .nav-links a:hover { color: var(--signal-volt); }
+  .nav-links a.active { color: var(--text-primary); }
+  .nav-links a.active::after {
+    content: ''; position: absolute; bottom: -6px; left: 50%;
+    transform: translateX(-50%);
+    width: 4px; height: 4px; border-radius: 50%; background: var(--aegis-orange);
+  }
+  .nav-progress {
+    position: absolute; bottom: -1px; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--aegis-orange), var(--signal-volt));
+    transform-origin: left; transform: scaleX(0); will-change: transform;
+    pointer-events: none; border-radius: 0 2px 2px 0;
+  }
+  @media (max-width: 720px) { .nav-links { gap: 18px; } .nav-links a { font-size: 11px; } }
+  @media (max-width: 540px) { .nav-links a:not(.active) { display: none; } }
+
   /* page header */
   .page-head {
-    padding: 80px 48px 48px; max-width: 1480px; margin: 0 auto;
+    padding: 136px 48px 48px; max-width: 1480px; margin: 0 auto;
     border-bottom: 1px solid var(--border-tertiary);
+    position: relative; overflow: hidden;
   }
+  .page-head::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 90% 0%, rgba(255,94,26,0.10), transparent 50%),
+      radial-gradient(ellipse at 0% 100%, rgba(200,255,0,0.04), transparent 50%);
+    pointer-events: none;
+  }
+  .page-head > * { position: relative; z-index: 1; }
   .page-head .eyebrow {
     font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.3em;
     color: var(--aegis-orange); text-transform: uppercase;
@@ -50,16 +95,8 @@
   }
   .page-head .meta span b { display: block; color: var(--text-primary); margin-top: 4px; font-weight: 500; }
 
-  .back-link {
-    position: fixed; top: 24px; left: 24px; z-index: 10;
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 10px 16px; background: rgba(10,12,16,0.7); backdrop-filter: blur(10px);
-    border: 1px solid var(--border-tertiary); border-radius: 100px;
-    color: var(--text-secondary); text-decoration: none;
-    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.22em;
-    text-transform: uppercase; transition: all 0.2s;
-  }
-  .back-link:hover { color: var(--signal-volt); border-color: var(--signal-volt); }
+  /* in-page board jump nav sits below the fixed site nav */
+  .board-nav-wrap { top: 65px !important; }
 
   /* board layout */
   .boards { padding: 48px; max-width: 1480px; margin: 0 auto; }
@@ -474,7 +511,26 @@
 </head>
 <body>
 
-<a href="index.html" class="back-link">← Brand Home</a>
+<nav class="nav">
+  <a class="nav-brand" href="index.html">
+    <svg viewBox="0 0 60 60" width="32" height="32" aria-hidden="true">
+      <g transform="translate(30,30)">
+        <polygon points="0,-26 22.5,-13 22.5,13 0,26 -22.5,13 -22.5,-13" fill="#FF5E1A"/>
+        <polygon points="0,-19 16,-9.5 16,9.5 0,19 -16,9.5 -16,-9.5" fill="#12151B"/>
+        <polygon points="0,9.5 -8,1 -4.8,-1.6 0,3.6 4.8,-1.6 8,1" fill="#FF5E1A"/>
+        <polygon points="0,-7.5 -1.9,-2.7 1.9,-2.7" fill="#C8FF00"/>
+      </g>
+    </svg>
+    <div class="nav-brand-name">AEGIS</div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Brand</a>
+    <a href="AEGIS - Brand Mockups.html" class="active">Mockups</a>
+    <a href="AEGIS Trek - Ghost Trail.html">Ghost Trail</a>
+    <a href="AEGIS Trek - MedLink.html">MedLink</a>
+  </div>
+  <div class="nav-progress"></div>
+</nav>
 
 <header class="page-head">
   <div class="eyebrow">Brand In The Wild · Application Boards</div>
@@ -933,13 +989,18 @@
     io.observe(b);
   });
 
-  /* Sticky nav active state */
+  /* Sticky nav active state + top-nav scroll progress */
   const navLinks = [...document.querySelectorAll('.board-nav a')];
   const sections = navLinks.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const progress = document.querySelector('.nav-progress');
   window.addEventListener('scroll', () => {
     let active = sections[0]?.id ?? '';
     sections.forEach(s => { if (window.scrollY + 140 >= s.offsetTop) active = s.id; });
     navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + active));
+    if (progress) {
+      const max = document.body.scrollHeight - window.innerHeight;
+      progress.style.transform = `scaleX(${Math.min(window.scrollY / Math.max(max, 1), 1)})`;
+    }
   }, { passive: true });
 })();
 </script>
